@@ -45,7 +45,36 @@ Xem log: /opt/grafana/data/log/grafana.log
 ```
 Tham khảo file custom.yml </opt/alertmanager>
 ```
-6. Note
+6. Firewall or IPtables
+```
+Nếu không dùng firewalld thì dùng iptables
+yum install iptables-services -y
+systemctl status iptables 
+systemctl enable iptables
+systemctl start iptables
+[root@prometheus ~]# cat /etc/sysconfig/iptables
+# sample configuration for iptables service
+# you can edit this manually or use system-config-firewall
+# please do not ask us to add additional ports/services to this default configuration
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+#-A INPUT -i ens160 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -i ens160 -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -i ens160 -p tcp --dport 9090 -j DROP
+-A INPUT -i ens160 -p tcp --dport 9093 -j DROP
+-A INPUT -i ens160 -p tcp --dport 3000 -j DROP
+-A INPUT -i ens160 -p tcp --dport 9100 -j DROP
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+```
+7. Note
 ```
 ten_collector=kieu_metric("ten_metrics","Tên chi tiết metrics",{Các thông tin bổ sung cho metrics})
 
