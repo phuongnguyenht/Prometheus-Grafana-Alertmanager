@@ -1,0 +1,14 @@
+groups:
+- name: rules/first_rules.yml
+  rules:
+  - alert: website_down
+    expr: probe_success == 0
+    for: 3m
+    labels:
+      severity: warning
+    annotations:
+      description: '{{ $labels.instance }} has been down for more than 3 minutes.'
+      summary: Instance {{ $labels.instance }} down
+  - alert: downage
+    expr: up == 0
+    for: 1h

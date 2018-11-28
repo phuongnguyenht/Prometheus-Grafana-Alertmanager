@@ -1,0 +1,10 @@
+groups:
+- name: rules/alert-rules.yml
+  rules:
+  - alert: Disk_Free
+    expr: node_filesystem_avail_bytes{mountpoint="/", job="node",device="rootfs"} / 1024 / 1024 / 1024 
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: '{{ $labels.instance }} of job {{ $labels.job }} Disk space < 50GB'
