@@ -23,6 +23,10 @@ mv alertmanager-0.15.3.linux-amd64 alertmanager
 mv grafana-5.3.4 grafana
 mv node_exporter-0.17.0-rc.0.linux-amd64 exporter
 
+#Install Percona app for Grafana
+cd /opt/grafana/bin/
+./grafana-cli plugins install percona-percona-app
+
 # Install nginx 
 # Add Nginx Repository
 yum install epel-release -y
